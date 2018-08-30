@@ -1,0 +1,22 @@
+{
+  "name": "blocipedia-node",
+  "version": "1.0.0",
+  "description": "An app that allows users to create, collaborate, and share wikis",
+  "main": "src/server.js",
+  "scripts": {
+    "test": "export NODE_ENV=test && jasmine"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/biksingh08/blocipedia-node.git"
+  },
+  "keywords": [
+    "wikis"
+  ],
+  "author": "Bikramjit Singh",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/biksingh08/blocipedia-node/issues"
+  },
+  "homepage": "https://github.com/biksingh08/blocipedia-node#readme"
+}
