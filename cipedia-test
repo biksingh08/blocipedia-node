@@ -1,0 +1,14 @@
+                                   List of databases
+      Name       |  Owner   | Encoding |   Collate   |    Ctype    | Access privileges 
+-----------------+----------+----------+-------------+-------------+-------------------
+ bloccit-dev     | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ bloccit-test    | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ blocipedia-dev  | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ blocipedia-test | postgres | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ postgres        | bik      | UTF8     | en_US.UTF-8 | en_US.UTF-8 | 
+ template0       | bik      | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/bik           +
+                 |          |          |             |             | bik=CTc/bik
+ template1       | bik      | UTF8     | en_US.UTF-8 | en_US.UTF-8 | =c/bik           +
+                 |          |          |             |             | bik=CTc/bik
+(7 rows)
+
