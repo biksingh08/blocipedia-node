@@ -15,6 +15,11 @@ module.exports = (sequelize, DataTypes) => {
     password: {
       type: DataTypes.STRING,
       allowNull: false
+    },
+    role: {
+      type: DataTypes.STRING,
+      allowNull: false,
+      defaultValue: 0
     }
   }, {});
 
@@ -25,6 +30,10 @@ module.exports = (sequelize, DataTypes) => {
       foreignKey: "userId",
       as: "wikis"
     });
-  };
+  }
+
+  User.prototype.isAdmin = function() {
+    return this.role === 2;
+  }
   return User;
-};
+}

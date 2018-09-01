@@ -14,11 +14,13 @@
 
          <a href="/wikis/<%= wiki.id %>/edit", class="btn btn-warning">Edit</a>
 
-         <form style="display:initial" action="/wikis/:id/destroy" method="post">
+         <% if(currentUser) { %>
 
-            <button type="submit" class="btn btn-danger">Delete</button>
+           <form style="display:initial" action="/wikis/:id/destroy" method="post">
+              <button type="submit" class="btn btn-danger">Delete</button>
+           </form>
 
-        </form>
+         <% } %>
 
       <p><%= wiki.body %></p>
 
