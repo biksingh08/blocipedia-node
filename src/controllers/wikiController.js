@@ -23,6 +23,7 @@ module.exports = {
             private: req.body.private,
             userId: req.user.id
         };
+
         wikiQueries.addWiki(newWiki, (err, wiki) => {
             if(err){
                 res.redirect(500, "/wikis/new");
