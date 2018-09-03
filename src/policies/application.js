@@ -8,11 +8,14 @@ module.exports = class ApplicationPolicy {
      _isOwner() {
        return this.record && (this.record.userId == this.user.id);
      }
+     _isStandard() {
+       return this.user && this.user.role == 0;
+     }
      _isPremium() {
-        return this.user && this.user.role == "premium";
+       return this.user && this.user.role == 1;
     }
      _isAdmin() {
-       return this.user && this.user.role == "admin";
+       return this.user && this.user.role == 2;
      }
      new() {
        return this.user != null;

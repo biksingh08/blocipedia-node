@@ -103,4 +103,105 @@ describe("routes : users", () => {
 
   });
 
+  describe("GET /users/:id", () => {
+
+    beforeEach((done) => {
+
+      this.user;
+
+      User.create({
+        username: "bik",
+        email: "bik@example.com",
+        password: "password",
+        role: 0
+      })
+      .then((res) => {
+        this.user = res;
+        done()
+      });
+
+    });
+
+    it("should show logged in users page", (done) => {
+
+      request.get(`${base}${this.user.id}`, (err, res, body) => {
+        expect(body).toContain("profile");
+        done();
+      });
+    });
+
+  });
+
+  describe("POST /users/:id/updatestandard", () => {
+
+    beforeEach((done) => {
+
+      this.user;
+
+      User.create({
+        username: "bik",
+        email: "bik@example.com",
+        password: "password",
+        role: 1
+      })
+      .then((res) => {
+        this.user = res;
+        done()
+      });
+
+    });
+
+    it("should change roles value to 0 when a user chooses the standard account", (done) => {
+
+        request.post(`${base}${this.user.id}/updatestandard`, (err,res, body) => {
+
+          expect(err).toBeNull();
+
+          User.findOne({ where: {id: this.user.id}})
+          .then((user)=> {
+            expect(user.role).toBe(0)
+            done();
+          });
+        });
+
+    });
+  });
+
+  describe("POST /users/:id/upgradepremium", () => {
+
+    beforeEach((done) => {
+
+      this.user;
+
+      User.create({
+        username: "bik",
+        email: "bik@example.com",
+        password: "password",
+        role: 0
+      })
+      .then((res) => {
+        this.user = res;
+        done()
+      });
+
+    });
+
+    it("should change roles value to 1 when a user chooses premium account", (done) => {
+
+      request.post(`${base}${this.user.id}/updatepremium`, (err,res, body) => {
+
+        expect(err).toBeNull();
+
+        User.findOne({ where: {id: this.user.id}})
+        .then((user)=> {
+          expect(user.role).toBe(1)
+          done();
+        });
+
+      });
+    });
+
+  });
+
+
 });

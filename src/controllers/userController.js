@@ -7,13 +7,15 @@ module.exports = {
   signUp(req, res, next){
     res.render("users/signup");
   },
+
   create(req, res, next){
   //#1
     let newUser = {
       username: req.body.username,
       email: req.body.email,
       password: req.body.password,
-      passwordConfirmation: req.body.passwordConfirmation
+      passwordConfirmation: req.body.passwordConfirmation,
+      role: req.body.role
     };
   // #2
     userQueries.createUser(newUser, (err, user) => {
@@ -64,6 +66,51 @@ module.exports = {
     req.logout();
     req.flash("notice", "You've successfully signed out!");
     res.redirect("/");
+  },
+
+  show(req, res, next){
+
+    userQueries.getUser(req.params.id, (err, user) => {
+        if(err || user === null){
+            req.flash("notice", "User with provided ID doesn't exist");
+            res.redirect("/");
+
+        } else {
+            res.render("users/show", {user});
+        }
+    });
+
+  },
+
+  updateStandard(req, res, next) {
+
+    userQueries.updateUser(req.params.id, 0, (err, user) => {
+        if(err || user == null) {
+            res.redirect(404, `/users/${req.params.id}`);
+        } else {
+                req.flash("notice", "You have successfully downgraded to standard account")
+                res.redirect(`/users/${req.params.id}`);
+            }
+    });
+  },
+
+  updatePremium(req, res, next) {
+
+    userQueries.updateUser(req.params.id, 1, (err, user) => {
+
+        if(err || user == null) {
+            res.redirect(404, `/users/${req.params.id}`);
+        } else {
+          req.flash("notice", "You have successfully upgraded to premium account");
+            res.redirect(`/users/${req.params.id}`);
+        }
+    });
+
+  },
+
+  payment(req, res, next) {
+    console.log("moo");
+    res.render("users/payment");
   }
 
 
