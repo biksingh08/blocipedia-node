@@ -76,6 +76,7 @@ module.exports = {
             res.redirect("/");
 
         } else {
+          console.log("does this show");
             res.render("users/show", {user});
         }
     });
