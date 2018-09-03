@@ -1,4 +1,5 @@
 const userQueries = require("../db/queries.users.js");
+const wikiQueries = require("../db/queries.wikis.js");
 const passport = require("passport");
 const sgMail = require('@sendgrid/mail');
 sgMail.setApiKey(process.env.SENDGRID_API_KEY);
@@ -76,7 +77,6 @@ module.exports = {
             res.redirect("/");
 
         } else {
-          console.log("does this show");
             res.render("users/show", {user});
         }
     });
@@ -89,7 +89,7 @@ module.exports = {
         if(err || user == null) {
             res.redirect(404, `/users/${req.params.id}`);
         } else {
-                req.flash("notice", "You have successfully downgraded to standard account")
+                req.flash("notice", "Your private wikis are now public")
                 res.redirect(`/users/${req.params.id}`);
             }
     });
@@ -110,7 +110,6 @@ module.exports = {
   },
 
   payment(req, res, next) {
-    console.log("moo");
     res.render("users/payment");
   }
 

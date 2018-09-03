@@ -331,26 +331,6 @@ describe("routes : wikis", () => {
 
         });
 
-        describe("POST /wikis/:id/destroy", () => {
-
-            it("should not delete the wiki with associated ID", (done) => {
-
-                Wiki.all()
-                .then((wikis) => {
-                    const wikiCountBeforeDelete = wikis.length;
-                     expect(wikiCountBeforeDelete).toBe(1);
-                     request.post(`${base}${this.wiki.id}/destory`, (err, res, body) => {
-                        Wiki.all()
-                        .then((wikis) => {
-                            expect(wikis.length).toBe(wikiCountBeforeDelete);
-                            done();
-                        })
-                    });
-                });
-            });
-
-        });
-
         describe("GET /wikis/:id/edit", () => {
 
             it("should render a view with an edit wiki form", (done) => {
@@ -400,6 +380,27 @@ describe("routes : wikis", () => {
                     });
                 });
             });
+          });
+
+
+          describe("POST /wikis/:id/destroy", () => {
+
+              it("should not delete the wiki with associated ID", (done) => {
+
+                  Wiki.all()
+                  .then((wikis) => {
+                      const wikiCountBeforeDelete = wikis.length;
+                       expect(wikiCountBeforeDelete).toBe(1);
+                       request.post(`${base}${this.wiki.id}/destroy`, (err, res, body) => {
+                          Wiki.all()
+                          .then((wikis) => {
+                              expect(wikis.length).toBe(wikiCountBeforeDelete);
+                              done();
+                          })
+                      });
+                  });
+              });
+
           });
      });
 // end standard user tests
@@ -505,26 +506,6 @@ describe("routes : wikis", () => {
             });
         });
 
-         describe("POST /wikis/:id/destroy", () => {
-
-            it("should not delete wiki with associated ID", (done) => {
-
-                Wiki.all()
-                .then((wikis) => {
-                    const wikiCountBeforeDelete = wikis.length;
-                     expect(wikiCountBeforeDelete).toBe(1);
-                     request.post(`${base}${this.wiki.id}/destory`, (err, res, body) => {
-                        Wiki.all()
-                        .then((wikis) => {
-                            expect(wikis.length).toBe(wikiCountBeforeDelete);
-                            done();
-                        })
-                    });
-                });
-            });
-
-        });
-
         describe("GET /wikis/:id/edit", () => {
 
              it("should render a view with edit wiki form", (done) => {
@@ -572,6 +553,26 @@ describe("routes : wikis", () => {
                 });
             });
         });
+
+        describe("POST /wikis/:id/destroy", () => {
+
+           it("should not delete wiki with associated ID", (done) => {
+
+               Wiki.all()
+               .then((wikis) => {
+                   const wikiCountBeforeDelete = wikis.length;
+                    expect(wikiCountBeforeDelete).toBe(1);
+                    request.post(`${base}${this.wiki.id}/destroy`, (err, res, body) => {
+                       Wiki.all()
+                       .then((wikis) => {
+                           expect(wikis.length).toBe(wikiCountBeforeDelete);
+                           done();
+                       })
+                   });
+               });
+           });
+
+       });
     });
 // end premium user tests
 });
