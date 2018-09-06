@@ -36,8 +36,8 @@ describe("routes : wikis", () => {
                     done();
                 });
             });
-        })
-    })
+        });
+    });
 
     // for roles use 0-standard,1-premium,2-admin
 
@@ -68,6 +68,22 @@ describe("routes : wikis", () => {
 
         });
 
+
+        describe("GET /wikis/new", () => {
+          console.info("", )
+
+            it("should render a new wiki form", (done) => {
+
+                request.get(`${base}new`, (err, res, body) => {
+                    expect(body).toContain("New Wiki");
+                    expect(err).toBeNull();
+                    done();
+                });
+
+            });
+
+        });
+
          describe("GET /wikis", () => {
 
              it("should return a status code 200 and all wikis", (done) => {
@@ -84,20 +100,6 @@ describe("routes : wikis", () => {
 
         });
 
-        describe("GET /topics/new", () => {
-
-            it("should render a new wiki form", (done) => {
-
-                request.get(`${base}new`, (err, res, body) => {
-                    expect(body).toContain("New Wiki");
-                    expect(err).toBeNull();
-                    done();
-                });
-
-            });
-
-        });
-
         describe("POST /wikis/create", () => {
 
             const options = {
@@ -105,11 +107,40 @@ describe("routes : wikis", () => {
                 form: {
                     title: "wiki create test",
                     body: "Too many tests for this wiki",
-                    private: false,
+                    private: false
                 }
             }
 
-            it("should create a new wiki and redirect", (done) => {
+            it("should create a publik wiki and redirect", (done) => {
+
+                request.post(options, (err, res, body) => {
+
+                    Wiki.findOne({where: {title: "wiki create test"}})
+                    .then((wiki) => {
+                        expect(wiki.title).toBe("wiki create test");
+                        expect(wiki.body).toBe("Too many tests for this wiki");
+                        expect(wiki).not.toBeNull();
+                        done();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        done();
+                    });
+
+                });
+
+            });
+
+            it("should create a private wiki and redirect", (done) => {
+
+              const options = {
+                  url: `${base}create`,
+                  form: {
+                      title: "wiki create test",
+                      body: "Too many tests for this wiki",
+                      private: true
+                  }
+              }
 
                 request.post(options, (err, res, body) => {
 
@@ -272,7 +303,8 @@ describe("routes : wikis", () => {
                 User.create({
                   username: "bik",
                   email: "bik@example.com",
-                  password: "password"
+                  password: "password",
+                  role: 0
                 })
                 .then((user)=> {
                   request.get({
@@ -280,7 +312,8 @@ describe("routes : wikis", () => {
                     form: {
                       username: user.username,
                       userId: user.id,
-                      email: user.email
+                      email: user.email,
+                      role: user.role
                     }
                   },
                     (err, res, body) => {
@@ -451,7 +484,8 @@ describe("routes : wikis", () => {
                 User.create({
                   username: "bik",
                   email: "bik@example.com",
-                  password: "password"
+                  password: "password",
+                  role: 1
                   })
                   .then((user)=> {
                       request.get({
@@ -459,7 +493,8 @@ describe("routes : wikis", () => {
                           form: {
                               username: user.username,
                               userId: user.id,
-                              email: user.email
+                              email: user.email,
+                              role: user.role
                           }
                       },
                           (err, res, body) => {
@@ -468,16 +503,41 @@ describe("routes : wikis", () => {
                   });
             });
 
-            const options = {
-                url: `${base}create`,
-                form: {
-                    title: "wiki create test",
-                    body: "Too many tests for this wiki",
-                    private: false
-                }
-            }
+            it("should create a private wiki and redirect", (done) => {
+              const options = {
+                  url: `${base}create`,
+                  form: {
+                      title: "wiki create test",
+                      body: "Too many tests for this wiki",
+                      private: false
+                  }
+              }
+                request.post(options, (err, res, body) => {
+                    Wiki.findOne({where: {title: "wiki create test"}})
+                    .then((wiki) => {
+                        expect(wiki.title).toBe("wiki create test");
+                        expect(wiki.body).toBe("Too many tests for this wiki");
+                        expect(wiki).not.toBeNull();
+                        done();
+                    })
+                    .catch((err) => {
+                        console.log(err);
+                        done();
+                    });
+                });
+            });
 
-            it("should create a new wiki and redirect", (done) => {
+            it("should create a private wiki and redirect", (done) => {
+
+              const options = {
+                  url: `${base}create`,
+                  form: {
+                      title: "wiki create test",
+                      body: "Too many tests for this wiki",
+                      private: true
+                  }
+              }
+
                 request.post(options, (err, res, body) => {
                     Wiki.findOne({where: {title: "wiki create test"}})
                     .then((wiki) => {

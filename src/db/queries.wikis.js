@@ -14,8 +14,19 @@ module.exports = {
         })
     },
 
-    getAllWikis(callback) {
+    getOnlyPublicWikis(callback) {
 
+        return Wiki.all({where: {private: false}})
+         .then((wikis) => {
+            callback(null, wikis);
+        })
+        .catch((err) => {
+            callback(err);
+        });
+    },
+
+    getAllWikis(callback) {
+      //includes public and private wikis
         return Wiki.all()
         .then((wikis) => {
             callback(null, wikis);
@@ -45,10 +56,10 @@ module.exports = {
               wiki.destroy()
               .then((res) => {
                   callback(null, wiki);
-              })
+              });
           }
           else {
-              req.flash("notice", "You are not authorized to do that.")
+              req.flash("notice", "You are not authorized to do that");
               callback(401);
           }
         })
@@ -75,5 +86,24 @@ module.exports = {
                 callback(err);
             });
         });
-    }
+    },
+
+    updateWikiPrivacy(id, updatedPrivacy, callback) {
+
+        return Wiki.findAll({where: {userId: id}})
+        .then((wikis)=> {
+
+            for (let i = 0; i < wikis.length; i++) {
+
+                wikis[i].update({private: updatedPrivacy}, {fields: ['private']});
+
+            }
+            return wikis
+
+            callback(null, wikis)
+                })
+                .catch((err) => {
+                    callback(err);
+                });
+        }
 }

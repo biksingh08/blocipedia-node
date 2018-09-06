@@ -10,6 +10,6 @@ router.get("/wikis/:id/edit", wikiController.edit);
 router.get("/wikis/:id", wikiController.show);
 router.post("/wikis/create", helper.ensureAuthenticated, wikiController.create);
 router.post("/wikis/:id/destroy", wikiController.destroy);
-router.post("/wikis/:id/update", wikiController.update);
+router.post("/wikis/:id/update", helper.ensureAuthenticated, wikiController.update);
 
 module.exports = router;

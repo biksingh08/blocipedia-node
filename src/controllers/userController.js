@@ -73,6 +73,7 @@ module.exports = {
 
     userQueries.getUser(req.params.id, (err, user) => {
         if(err || user === null){
+          console.log("error check", err);
             req.flash("notice", "User with provided ID doesn't exist");
             res.redirect("/");
 
@@ -89,10 +90,19 @@ module.exports = {
         if(err || user == null) {
             res.redirect(404, `/users/${req.params.id}`);
         } else {
-                req.flash("notice", "Your private wikis are now public")
+                req.flash("notice", "Your private wikis are now public");
                 res.redirect(`/users/${req.params.id}`);
             }
     });
+
+    wikiQueries.updateWikiPrivacy(req.params.id, false, (err, user) => {
+        if(err || user == null) {
+            console.log(err);
+        } else {
+                res.redirect(`/users/${req.params.id}`)
+            }
+    });
+
   },
 
   updatePremium(req, res, next) {

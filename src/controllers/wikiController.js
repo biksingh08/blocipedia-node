@@ -4,20 +4,43 @@ const Authorizer = require("../policies/wiki");
 module.exports = {
 
     index(req,res,next){
-        wikiQueries.getAllWikis((err, wikis) => {
-          if(err){
-            res.redirect(500, "static/index");
-          } else {
-            res.render("wikis/index", {wikis});
-          }
-        })
-      },
+
+      if(req.user.role === 0){
+
+          wikiQueries.getOnlyPublicWikis((err, wikis) => {
+              if(err) {
+              } else {
+                  res.render("wikis/index", {wikis})
+              }
+          });
+      } else {
+        // if user is private (role = 1) get all public and private wikis
+          wikiQueries.getAllWikis((err, wikis) => {
+              if(err) {
+              } else {
+                  res.render("wikis/index", {wikis});
+              }
+          });
+      }
+  },
 
     new(req, res, next) {
+
+      const authorized = new Authorizer(req.user).new();
+      if(authorized) {
         res.render("wikis/new");
+        } else {
+          req.flash("notice", "You are not authorized to do that.");
+          res.redirect("/wikis");
+        }
     },
 
     create(req, res, next) {
+
+      const authorized = new Authorizer(req.user).new();
+
+      if(authorized) {
+
         let newWiki = {
             title: req.body.title,
             body: req.body.body,
@@ -32,6 +55,13 @@ module.exports = {
                 res.redirect(303, `/wikis/${wiki.id}`)
             }
         });
+
+      } else {
+
+        req.flash("notice", "You are not authorized to do that.");
+        res.redirect("/wikis");
+      }
+
     },
 
     edit(req, res, next){

@@ -27,13 +27,27 @@
           <div class="form-group">
               <h5>Choose one of the options below</h5>
           </div>
+          <h2><%= currentUser%></h2>
 
-          <div class="form-group">
-              <label for="private" class="radio-inline-private">Private</label>
-                  <input type="radio" name="private" value="true">
-              <label for="private" class="radio-inline-public">Public</label>
-                  <input type="radio" name="private" value="false">
-          </div>
+          <% if(currentUser.isStandard) { %>
+
+              <div class="form-group">
+                  <label for="private" class="radio-inline-public">Public</label>
+                      <input type="radio" name="private" value="false">
+              </div>
+
+          <% } %>
+
+          <% if(currentUser.isPremium() || currentUser.isAdmin()) { %>
+
+              <div class="form-group">
+                  <label for="private" class="radio-inline-private">Private</label>
+                      <input type="radio" name="private" value="true">
+                  <label for="private" class="radio-inline-public">Public</label>
+                      <input type="radio" name="private" value="false">
+              </div>
+
+          <% } %>
 
           <button type="submit" class="btn btn-primary">Submit</button>
 
