@@ -10,18 +10,18 @@
 
     <main class="container">
 
-      <h1><%= wiki.title %></h1>
+      <h1><%- wikiMarkdown.title %></h1>
 
-         <a href="/wikis/<%= wiki.id %>/edit" class="btn btn-warning">Edit</a>
+      <a href="/wikis/<%= wikiMarkdown.id %>/edit" class="btn btn-warning">Edit</a>
 
          <% if(currentUser) { %>
-           <form style="display:initial" action="/wikis/<%=wiki.id%>/destroy" method="post">
+           <form style="display:initial" action="/wikis/<%=wikiMarkdown.id%>/destroy" method="post">
               <button type="submit" class="btn btn-danger">Delete</button>
            </form>
 
          <% } %>
 
-      <p><%= wiki.body %></p>
+      <p><%- wikiMarkdown.body %></p>
 
     </main>
 
