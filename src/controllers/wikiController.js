@@ -1,35 +1,29 @@
 const wikiQueries = require("../db/queries.wikis.js");
+const collaboratorQueries = require("../db/queries.collaborators.js");
 const Authorizer = require("../policies/wiki");
 const markdown = require( "markdown" ).markdown;
+const Collaborator = require("../db/models").Collaborators;
 
 module.exports = {
 
     index(req,res,next){
 
-      if(req.user.role === 0){
+      wikiQueries.getAllWikis(req.user.id, (err,wikis)=>{
+          if(err) {
+              console.log(err);
+          } else {
+              res.render("wikis/index", {wikis})
+          }
+      });
 
-          wikiQueries.getOnlyPublicWikis((err, wikis) => {
-              if(err) {
-              } else {
-                  res.render("wikis/index", {wikis})
-              }
-          });
-      } else {
-        // if user is private (role = 1) get all public and private wikis
-          wikiQueries.getAllWikis((err, wikis) => {
-              if(err) {
-              } else {
-                  res.render("wikis/index", {wikis});
-              }
-          });
-      }
   },
 
     new(req, res, next) {
 
       const authorized = new Authorizer(req.user).new();
+
       if(authorized) {
-        res.render("wikis/new");
+        res.render("wikis/new", {currentUser: req.user});
         } else {
           req.flash("notice", "You are not authorized to do that.");
           res.redirect("/wikis");
@@ -53,7 +47,7 @@ module.exports = {
             if(err){
                 res.redirect(500, "/wikis/new");
             } else {
-                res.redirect(303, `/wikis/${wiki.id}`)
+                res.redirect(303, `/wikis/${wiki.id}`);
             }
         });
 
@@ -66,12 +60,12 @@ module.exports = {
     },
 
     edit(req, res, next){
-        wikiQueries.getWiki(req.params.id, (err, wiki) =>{
+        wikiQueries.getWiki(req.params.id, (err, wiki) => {
 
             if(err || wiki == null) {
                 res.redirect(404, "/")
             } else {
-                res.render("wikis/edit", {wiki})
+                res.render("wikis/edit", {wiki});
             }
         });
     },
@@ -79,9 +73,9 @@ module.exports = {
     update(req, res, next) {
         wikiQueries.updateWiki(req.params.id, req.body, (err, wiki) => {
             if(err || wiki == null) {
-                res.redirect(404, `/wikis/${req.params.id}/edit`)
+                res.redirect(404, `/wikis/${req.params.id}/edit`);
             } else {
-                res.redirect(`/wikis/${req.params.id}`)
+                res.redirect(`/wikis/${req.params.id}`);
             }
         });
     },
@@ -90,7 +84,7 @@ module.exports = {
 
       wikiQueries.deleteWiki(req, (err, wiki) => {
             if(err) {
-                res.redirect(err, `/wikis/${req.params.id}`)
+                res.redirect(err, `/wikis/${req.params.id}`);
             } else {
                 res.redirect(303, "/wikis");
             }
@@ -100,20 +94,27 @@ module.exports = {
     show(req, res, next) {
 
       wikiQueries.getWiki(req.params.id, (err, wiki) => {
+        wiki.getCollaborators()
+          .then(collaborators => {
 
-          let wikiMarkdown = {
-              title: markdown.toHTML(wiki.title),
-              body: markdown.toHTML(wiki.body),
-              id: wiki.id,
-              userId: wiki.userId,
-              private: wiki.private
-          }
+            let wikiMarkdown = {
+                title: markdown.toHTML(wiki.title),
+                body: markdown.toHTML(wiki.body),
+                id: wiki.id,
+                userId: wiki.userId,
+                private: wiki.private,
+                collaborators: wiki.collaborators,
+                currentUserId: req.user.id
+            }
 
-          if(err || wiki == null) {
-              res.redirect(404, "/");
-          } else {
-              res.render("wikis/show", {wikiMarkdown});
-          }
+            if(err || wiki == null) {
+                res.redirect(404, "/");
+            } else {
+                res.render("wikis/show", {wikiMarkdown, collaborators});
+            }
+          });
+
+
       });
     }
 }

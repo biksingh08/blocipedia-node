@@ -70,7 +70,6 @@ describe("routes : wikis", () => {
 
 
         describe("GET /wikis/new", () => {
-          console.info("", )
 
             it("should render a new wiki form", (done) => {
 
@@ -284,7 +283,7 @@ describe("routes : wikis", () => {
 
         });
 
-        describe("GET /topics/new", () => {
+        describe("GET /wikis/new", () => {
 
             it("should render a new wiki form", (done) => {
                 request.get(`${base}new`, (err, res, body) => {
@@ -466,7 +465,7 @@ describe("routes : wikis", () => {
 
         });
 
-        describe("GET /topics/new", () => {
+        describe("GET /wikis/new", () => {
 
             it("should render a new wiki form", (done) => {
                 request.get(`${base}new`, (err, res, body) => {

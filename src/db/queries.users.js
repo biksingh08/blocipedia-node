@@ -34,6 +34,17 @@ module.exports = {
 
   },
 
+  getAllUsers(callback) {
+
+    return User.all()
+     .then((users) => {
+        callback(null, users);
+    })
+    .catch((err) => {
+        callback(err);
+    });
+  },
+
   updateUser(id, updatedRole, callback) {
 
     return User.findById(id)

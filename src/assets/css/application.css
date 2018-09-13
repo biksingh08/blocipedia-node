@@ -1,3 +1,9 @@
 body {
   padding-top: 54px;
 }
+
+.table {
+  border-radius: 10px;
+  width: 80%;
+  margin: 5px;
+ }

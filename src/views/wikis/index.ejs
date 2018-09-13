@@ -16,8 +16,17 @@
 
         <% wikis.forEach((wiki) => { %>
 
+          <h1><%- wiki.collaborators %></h1>
+
+
           <li class="list-group-item">
-             <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a>
+
+            <% if(wiki) { %>
+
+                <a href="/wikis/<%= wiki.id %>"> <%= wiki.title %> </a>
+
+            <% } %>
+
           </li>
 
         <% }) %>

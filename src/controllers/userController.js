@@ -73,7 +73,6 @@ module.exports = {
 
     userQueries.getUser(req.params.id, (err, user) => {
         if(err || user === null){
-          console.log("error check", err);
             req.flash("notice", "User with provided ID doesn't exist");
             res.redirect("/");
 

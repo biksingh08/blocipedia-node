@@ -27,9 +27,8 @@
           <div class="form-group">
               <h5>Choose one of the options below</h5>
           </div>
-          <h2><%= currentUser%></h2>
 
-          <% if(currentUser.isStandard) { %>
+          <% if(currentUser.role == 0) { %>
 
               <div class="form-group">
                   <label for="private" class="radio-inline-public">Public</label>
@@ -38,7 +37,7 @@
 
           <% } %>
 
-          <% if(currentUser.isPremium() || currentUser.isAdmin()) { %>
+          <% if(currentUser.role == 1 || currentUser.role == 2) { %>
 
               <div class="form-group">
                   <label for="private" class="radio-inline-private">Private</label>

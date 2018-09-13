@@ -1,17 +1,29 @@
+const User = require("./models").User;
 const Wiki = require("./models").Wiki;
+const Collaborator = require("./models").Collaborators;
 const Authorizer = require("../policies/wiki.js");
+const Sequelize = require("./models/index").sequelize;
 
 module.exports = {
 
     getWiki(id, callback){
 
-        return Wiki.findById(id)
+        return Wiki.findById(id, {
+            include: [{
+                model: Collaborator,
+                as: "collaborators",
+                attributes: [
+                    "userId",
+                    "id"
+                ]
+            }]
+        })
         .then((wiki) => {
             callback(null, wiki)
         })
         .catch((err) => {
             callback(err);
-        })
+        });
     },
 
     getOnlyPublicWikis(callback) {
@@ -25,16 +37,44 @@ module.exports = {
         });
     },
 
-    getAllWikis(callback) {
-      //includes public and private wikis
-        return Wiki.all()
-        .then((wikis) => {
+    getOnlyPrivateWikis(callback) {
+
+        return Wiki.all({where: {private: true}})
+         .then((wikis) => {
             callback(null, wikis);
+        })
+        .catch((err) => {
+            callback(err);
+        });
+    },
+
+    getAllWikis(id, callback) {
+      // includes private and/or public wikis, and include collaborator here as well
+        return Wiki.all({
+            include: [{
+                model: Collaborator,
+                as: "collaborators",
+                attributes: [
+                    "userId",
+                    "id"
+                ]
+                }]
+            }
+        )
+        .then((wikis) => {
+
+          callback(null, wikis.filter(wiki => {
+            if (wiki.private && !wiki.collaborators.find(c => c.userId === id)) {
+              return false;
+            }
+            return true;
+          }));
         })
         .catch((err) =>{
             callback(err);
-        })
+        });
     },
+
 
     addWiki(newWiki, callback) {
 

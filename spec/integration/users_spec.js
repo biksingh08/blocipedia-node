@@ -115,8 +115,8 @@ describe("routes : users", () => {
         password: "password",
         role: 0
       })
-      .then((res) => {
-        this.user = res;
+      .then((user) => {
+        this.user = user;
         done()
       });
 
