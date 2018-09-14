@@ -20,11 +20,7 @@
   "author": "Bikramjit Singh",
   "license": "ISC",
   "devDependencies": {
-    "bugs": {
-      "url": "https://github.com/biksingh08/blocipedia-node/issues"
-    },
     "faker": "^4.1.0",
-    "homepage": "https://github.com/biksingh08/blocipedia-node#readme",
     "jasmine": "^3.0.0",
     "request": "^2.83.0"
   },
