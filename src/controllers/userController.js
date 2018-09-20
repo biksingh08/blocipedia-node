@@ -57,6 +57,7 @@ module.exports = {
        req.flash("notice", "Sign in failed. Please try again.")
        res.redirect("/users/sign_in");
      } else {
+       console.log(req.user);
        req.flash("notice", "You've successfully signed in!");
        res.redirect("/");
      }

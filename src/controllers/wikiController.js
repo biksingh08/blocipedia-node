@@ -106,6 +106,7 @@ module.exports = {
                 collaborators: wiki.collaborators,
                 currentUserId: req.user.id
             }
+            console.log(wiki.userId, req.user.id);
 
             if(err || wiki == null) {
                 res.redirect(404, "/");
